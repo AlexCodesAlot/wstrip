@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+
+# Filename: wstrip
+# Description: wstrip is short for whitespace strip. It's purpose is to strip leading and trailing
+#              whitespace from every line in a file.
+# Author: Alexander Stevenson
+# Email: alexs@purdue.edu
+
+# imports
+import argparse
+import os
+import sys
+
+# setup argument parsing for passing filename param
+parser = argparse.ArgumentParser(description="Strip leading and trailing whitespace from files.")
+parser.add_argument("-f", type=str, help="/path/to/file you want to strip", action="store", required=True)
+
+# handle no args
+if len(sys.argv) < 3:
+    parser.print_help(sys.stderr)
+    sys.exit(1)
+
+# get those args!
+args = parser.parse_args()
+
+fn = args.f
+
+if os.path.isfile(fn):
+    # cool, open file and strip it
+    
+    # grab all file contents. this might not be good for huge files
+    with open(fn, "r") as fn_handle:
+        fn_content = fn_handle.readlines()
+    
+    # create a new array to place stripped lines into
+    fn_content_stripped = []
+    line = 0
+    for line in range(len(fn_content)):
+        fn_content_new = fn_content[line].strip()
+        fn_content_new = fn_content_new + "\n"
+        fn_content_stripped.append(fn_content_new)
+    
+    # now overwrite the file with the stripped lines
+    with open(fn, "w") as fn_handle:
+        fn_handle.writelines(fn_content_stripped)
+        
+    # all done! print msg and exit
+    print("finished stripping file!")
+else:
+    # doesn't exist. tell the user and quit
+    print("this file doesn't exist. please try again.")
+    sys.exit(1)
